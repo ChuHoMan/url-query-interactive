@@ -1,0 +1,19 @@
+button {
+    appearance: button;
+    background-color: transparent;
+    background-image: none;
+    outline-offset: 2px !important;
+    outline: transparent solid 2px !important;
+    text-transform: none;
+    font-family: inherit;
+    font-size: 100%;
+    line-height: inherit;
+    color: inherit;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    border-width: 0px;
+    border-style: solid;
+    border-color: currentcolor;
+    cursor: pointer;
+}

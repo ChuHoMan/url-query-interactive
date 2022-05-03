@@ -4,5 +4,8 @@ import { defineNuxtConfig } from 'nuxt'
 export default defineNuxtConfig({
     typescript: {
         shim: false
-    }
+    },
+    modules: [
+        ['unplugin-icons/nuxt', {}]
+    ]
 })
