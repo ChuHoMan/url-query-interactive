@@ -9,6 +9,7 @@ specifiers:
   eslint-plugin-import: ^2.26.0
   eslint-plugin-vue: ^8.7.1
   less: ^4.1.2
+  nuxi: ^3.0.0-rc.2
   nuxt: 3.0.0-rc.1
   query-string: ^7.1.1
   typescript: ^4.6.4
@@ -26,6 +27,7 @@ devDependencies:
   eslint-plugin-import: registry.npmjs.org/eslint-plugin-import/2.26.0_eslint@7.32.0
   eslint-plugin-vue: registry.npmjs.org/eslint-plugin-vue/8.7.1_eslint@7.32.0
   less: registry.npmjs.org/less/4.1.2
+  nuxi: registry.npmjs.org/nuxi/3.0.0-rc.2
   nuxt: registry.npmjs.org/nuxt/3.0.0-rc.1_less@4.1.2
   typescript: registry.npmjs.org/typescript/4.6.4
   unplugin-icons: registry.npmjs.org/unplugin-icons/0.14.3

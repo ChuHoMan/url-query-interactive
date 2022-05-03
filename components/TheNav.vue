@@ -1,5 +1,5 @@
 <template>
-  <div class="nav__container">
+  <header class="nav__container">
     <div class="nav__desc">
       <span class="nav__desc-en">URL QUERY INTERACTIVE</span>
       <span class="nav__desc-cn">交互式查看 url query</span>
@@ -7,7 +7,7 @@
     <div class="nav__icons">
       <DarkToggle />
     </div>
-  </div>
+  </header>
 </template>
 
 <script lang="ts">
