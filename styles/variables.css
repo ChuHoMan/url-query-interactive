@@ -1,3 +1,5 @@
 :root {
-    --primary-color: #0F8FFF
+    --primary-color: #0F8FFF;
+    --bg-color: #ffffff;
+    --border-color: #cccccc;
 }

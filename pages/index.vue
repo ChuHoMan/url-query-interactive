@@ -5,7 +5,7 @@
       <Search />
     </div>
     <div class="app__right">
-      <ParsedResult />
+      <ParsedResult :url="inputModel" />
     </div>
   </main>
 </template>
@@ -17,6 +17,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
+import { inputModel } from '../composables/state';
 </script>
 
 <style lang="less">

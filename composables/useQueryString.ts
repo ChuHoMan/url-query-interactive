@@ -1,4 +1,4 @@
-import { reactive, toRefs } from "vue"
+import { watch, reactive, toRefs } from "vue"
 import { parse } from 'query-string'
 import type { ParsedQuery } from 'query-string'
 
@@ -21,16 +21,21 @@ export function useQueryString(url: string) {
         rawUrl: url,
         originPath: ''
     })
+    const urlRef = ref<Partial<URL>>({})
 
-    const urlRef = reactive<Partial<URL>>(createUrl(url))
+    watch(url, (newValue) => {
+       urlRef.value = createUrl(newValue)
+       state.query = parse(urlRef.value.search || '')
+       state.hash = parse(urlRef.value.hash || '')
+    }, {
+        immediate: true
+    })
 
-    state.query = parse(urlRef.search || '')
-    state.hash = parse(urlRef.hash || '')
     const originPath = computed(() => {
-        if(!urlRef?.origin && !urlRef?.pathname) {
+        if(!urlRef.value?.origin && !urlRef.value?.pathname) {
             return ''
         }
-        return urlRef!.origin + urlRef!.pathname
+        return `${urlRef.value!.origin}${urlRef.value!.pathname}`
     })
 
     return {

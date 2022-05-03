@@ -1,6 +1,6 @@
 <template>
   <section class="origin__wrapper">
-    <div class="origin__title">
+    <div class="title">
       host and path
     </div>
     <div class="origin__content">
@@ -13,12 +13,24 @@
       </button>
     </div>
   </section>
+  <section>
+    <div class="title">
+      query
+    </div>    
+    <ul
+      v-for="queryKey of Object.keys(query)"
+      :key="queryKey"
+      class="query__list"
+    >
+      <li
+        class="query__list-item"
+      >
+        <span class="query__key">{{ queryKey }}</span>
+        <span class="query__value">{{ query[queryKey] ?? '' }}</span>
+      </li>
+    </ul>
+  </section>
 </template>
-
-
-
-
-
 
 <script lang="ts" setup>
 import EvaCopyOutline from '~icons/eva/copy-outline'
@@ -29,10 +41,10 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  url: 'https://www.abc.com/test?a=1&b=c&c=d'
+  url: ''
 })
 
-const { originPath, query, hash } = useQueryString(props.url)
+const { originPath, query = {}, hash } = useQueryString(toRef(props, 'url'))
 
 const copied = ref<boolean>(false)
 const handleCopy = async () => {
@@ -52,6 +64,11 @@ export default {
 </script>
 
 <style lang="less">
+.title {
+    font-size: 16px;
+    opacity: 0.4;
+}
+
 .origin {
     &__wrapper {
         box-sizing: border-box;
@@ -60,14 +77,9 @@ export default {
         flex-direction: column;
     }
 
-    &__title,
+    .title,
     &__content {
         font-weight: 200;
-    }
-
-    &__title {
-        font-size: 16px;
-        opacity: 0.4;
     }
 
     &__content { 
@@ -76,8 +88,9 @@ export default {
         align-items: center;
         justify-content: space-between;
         padding: 8px 16px;
-        border: 1px solid #333;
+        border: 1px solid var(--border-color);
         font-size: 20px;
+        word-break: break-all;
         &:hover {
             .origin--copy {
                 opacity: 1;
@@ -90,6 +103,25 @@ export default {
         display: flex;
         align-items: center;
         transition: opacity 0.3s ease-in;
+    }
+}
+
+.query {
+    &__list {
+        &:not(:first-of-type) {
+            border-top: 0;
+        }
+        border: 1px solid var(--border-color);
+        padding: 8px 16px;
+        &-item {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    &__value {
+        opacity: 0.5;
+        word-wrap: break-word;
     }
 }
 </style>
