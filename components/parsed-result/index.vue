@@ -119,6 +119,10 @@ export default {
         }
     }
 
+    &__key {
+      opacity: 0.8;
+    }
+
     &__value {
         opacity: 0.5;
         word-wrap: break-word;

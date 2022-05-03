@@ -6,6 +6,7 @@ export default defineNuxtConfig({
         shim: false
     },
     modules: [
-        ['unplugin-icons/nuxt', {}]
+        ['unplugin-icons/nuxt', {}],
+        '@vueuse/nuxt'
     ]
 })

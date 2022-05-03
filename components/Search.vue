@@ -25,7 +25,7 @@ import { inputModel } from '../composables/state';
 const inputEl = ref<HTMLInputElement>()
 
 const clear = () => {
-      inputModel.value = ''
+  inputModel.value = ''
   nextTick().then(() => {
     inputEl.value?.focus()
   })
@@ -61,5 +61,6 @@ export default {
   outline-style: none;
   caret-color: var(--primary-color);
   font-size: 24px;
+  background-color: transparent;
 }
 </style>

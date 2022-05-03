@@ -11,8 +11,7 @@
 <script setup lang="ts">
 import EvaMoonOutline from '~icons/eva/moon-outline'
 import EvaSunOutline from '~icons/eva/sun-outline'
-// TODO dark mode
-const isDark = ref(false)
+const isDark = useDark()
 
 function toggleDark() {
   isDark.value = !isDark.value
