@@ -80,6 +80,10 @@ typings/
 
 # Nuxt.js build / generate output
 .nuxt
+.nitro
+.cache
+.output
+.env
 dist
 
 # Gatsby files
@@ -102,3 +106,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+
+# editor
+.idea

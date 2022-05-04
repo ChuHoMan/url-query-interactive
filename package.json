@@ -1,0 +1,30 @@
+{
+  "name": "url-query-interactive",
+  "version": "0.0.0",
+  "type": "module",
+  "author": "ChuHoMan",
+  "private": true,
+  "packageManager": "pnpm@7.0.0",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "query-string": "^7.1.1"
+  },
+  "devDependencies": {
+    "@iconify-json/eva": "^1.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "@vueuse/nuxt": "^8.3.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-vue": "^8.7.1",
+    "less": "^4.1.2",
+    "nuxi": "^3.0.0-rc.2",
+    "typescript": "^4.6.4",
+    "unplugin-icons": "^0.14.3"
+  }
+}

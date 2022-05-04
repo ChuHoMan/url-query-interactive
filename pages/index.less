@@ -1,0 +1,22 @@
+.app {
+    &__main {
+        display: grid;
+        height: 100vh;width: 100%;
+        overflow: hidden;
+        gap: 0.5rem;
+
+        @media (min-width: 1024px) {
+            grid-template-columns: repeat(2, minmax(0px, 1fr));
+        }
+        
+    }
+
+    &__left {
+        padding: 4px 16px;
+    }
+
+    &__right {
+        padding: 4px 16px;
+        overflow: auto;
+    }
+}
