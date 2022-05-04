@@ -54,9 +54,7 @@ const { originPath, query = {}, hash } = useQueryString(toRef(props, 'url'))
 const copied = ref<boolean>(false)
 const handleCopy = async () => {
     if(copied.value === true) return
-    console.log(window.navigator)
     writeTextToClipboard(originPath.value)
-    
     copied.value = true
     setTimeout(() => {
         copied.value = false
