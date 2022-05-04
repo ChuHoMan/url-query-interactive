@@ -3,6 +3,16 @@
 </template>
 
 <script setup lang="ts">
+useHead({
+  title: 'Interactive Url Query',
+  meta: [{
+    name: 'description',
+    content: 'url query interact.'
+  }],
+  link: [
+    { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
+  ],
+})
 </script>
 
 <style>
