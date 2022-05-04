@@ -3,6 +3,7 @@
 > Use query-string to parse url query and display it on the page with Nuxt3
 
 ## DEMO
+![demo](https://github.com/ChuHoMan/url-query-interactive/blob/main/examples/demo.png)
 ## Setup
 
 Make sure to install the dependencies:
