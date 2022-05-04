@@ -3,9 +3,14 @@
     <div class="title">
       host and path
     </div>
-    <div class="origin__content">
+    <div
+      v-show="originPath"
+      class="origin__content"
+    >
       {{ originPath }}
-      <button class="origin--copy">
+      <button
+        class="origin--copy"
+      >
         <component
           :is="copied ? EvaCheckmarkOutline : EvaCopyOutline"
           @click="handleCopy"
@@ -49,11 +54,32 @@ const { originPath, query = {}, hash } = useQueryString(toRef(props, 'url'))
 const copied = ref<boolean>(false)
 const handleCopy = async () => {
     if(copied.value === true) return
-    await navigator.clipboard.writeText(originPath.value)
+    writeTextToClipboard(originPath.value)
     copied.value = true
     setTimeout(() => {
         copied.value = false
     }, 3000)
+}
+
+const writeTextToClipboard = async (text: string) => {
+    const res = await navigator?.permissions?.query({ name: 'clipboard-write' })
+    if(res?.state === 'granted') {
+      await navigator.clipboard.writeText(text)
+      return;
+    }
+
+    // 降级
+    const input = document.createElement('input');
+    input.setAttribute('readonly', 'readonly');
+    input.setAttribute('value', text);
+    document.body.appendChild(input);
+    input.select()
+    // for ios
+    input.setSelectionRange(0, 9999);
+    if (document.execCommand('copy')) {
+        document.execCommand('copy');
+    }
+    document.body.removeChild(input);
 }
 </script>
 
