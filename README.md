@@ -1,7 +1,9 @@
-# Nuxt 3 Minimal Starter
+# URL QUERY INTERACTIVE 
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+> Use query-string to parse url query and display it on the page with Nuxt3
 
+## DEMO
+![demo](https://github.com/ChuHoMan/url-query-interactive/blob/main/examples/demo.png)
 ## Setup
 
 Make sure to install the dependencies:
@@ -40,3 +42,9 @@ npm run preview
 ```
 
 Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment) for more information.
+
+## License
+
+Made with 💛
+
+Published under [MIT License](./LICENSE).
