@@ -2,14 +2,14 @@
   <div class="input__wrapper">
     <input
       ref="inputEl"
-      v-model="inputModel"
+      v-model="computedInputModel"
       class="url-query-input"
       aria-label="输入 URL"
       placeholder="输入 URL"
       autocomplete="off"
     >
     <button
-      v-show="inputModel"
+      v-show="computedInputModel"
       class="input--clear"
       @click="clear"
     >
@@ -20,12 +20,12 @@
 
 <script lang="ts" setup>
 import EvaCloseOutline from '~icons/eva/close-outline'
-import { inputModel } from '../composables/state';
+import { computedInputModel } from '../composables/state';
 
 const inputEl = ref<HTMLInputElement>()
 
 const clear = () => {
-  inputModel.value = ''
+  computedInputModel.value = ''
   nextTick().then(() => {
     inputEl.value?.focus()
   })

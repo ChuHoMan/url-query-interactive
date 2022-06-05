@@ -1,51 +1,53 @@
 <template>
-  <template v-if="originPath">
-    <section class="origin__wrapper">
-      <div class="title">
-        host and path
-      </div>
-      <div
-        v-show="originPath"
-        class="origin__content"
-      >
-        {{ originPath }}
-        <button
-          class="origin--copy button--copy"
+  <client-only>
+    <template v-if="originPath">
+      <section class="origin__wrapper">
+        <div class="title">
+          host and path
+        </div>
+        <div
+          v-show="originPath"
+          class="origin__content"
         >
-          <component
-            :is="copied ? EvaCheckmarkOutline : EvaCopyOutline"
-            @click="startCopy"
-          />
-        </button>
-      </div>
-    </section>
-    <section v-if="Object.keys(query).length">
-      <div class="title">
-        <span>query</span>
-        <span class="query__copy">
-          Copy as JSON
-        <button class="button--copy">
-          <component
-            :is="queryCopied ? EvaCheckmarkOutline : EvaCopyOutline"
-            @click="startCopyQuery"
-          />
-        </button>
-        </span>
-      </div>    
-      <ul
-        v-for="queryKey of Object.keys(query)"
-        :key="queryKey"
-        class="query__list"
-      >
-        <li
-          class="query__list-item"
-        >
-          <span class="query__key">{{ queryKey }}</span>
-          <span class="query__value">{{ query?.[queryKey] ?? '' }}</span>
-        </li>
-      </ul>
-    </section>
-  </template>
+          {{ originPath }}
+          <button
+            class="origin--copy button--copy"
+          >
+            <component
+              :is="copied ? EvaCheckmarkOutline : EvaCopyOutline"
+              @click="startCopy"
+            />
+          </button>
+        </div>
+      </section>
+        <section v-if="Object.keys(query).length">
+          <div class="title">
+            <span>query</span>
+            <span class="query__copy">
+              Copy as JSON
+            <button class="button--copy">
+              <component
+                :is="queryCopied ? EvaCheckmarkOutline : EvaCopyOutline"
+                @click="startCopyQuery"
+              />
+            </button>
+            </span>
+          </div>    
+          <ul
+            v-for="queryKey of Object.keys(query)"
+            :key="queryKey"
+            class="query__list"
+          >
+            <li
+              class="query__list-item"
+            >
+              <span class="query__key">{{ queryKey }}</span>
+              <span class="query__value">{{ query?.[queryKey] ?? '' }}</span>
+            </li>
+          </ul>
+        </section>
+    </template>
+  </client-only>
 </template>
 
 <script lang="ts" setup>
