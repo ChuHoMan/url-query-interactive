@@ -49,7 +49,7 @@ const props = withDefaults(defineProps<Props>(), {
   url: ''
 })
 
-const { originPath, query = {}, hash } = useQueryString(toRef(props, 'url'))
+const { originPath, query = {} } = useQueryString(toRef(props, 'url'))
 
 const copied = ref<boolean>(false)
 const handleCopy = async () => {
@@ -62,7 +62,7 @@ const handleCopy = async () => {
 }
 
 const writeTextToClipboard = async (text: string) => {
-    const res = await navigator?.permissions?.query({ name: 'clipboard-write' })
+    const res = await (navigator?.permissions?.query as any)({ name: 'clipboard-write' })
     if(res?.state === 'granted') {
       await navigator.clipboard.writeText(text)
       return;
