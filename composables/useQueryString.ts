@@ -1,6 +1,10 @@
-import { watch, reactive, toRefs } from "vue"
-import { parse } from 'query-string'
-import type { ParsedQuery } from 'query-string'
+import { watch, reactive, toRefs, Ref } from "vue"
+
+interface QueryStringState {
+    query: Record<string, string>,
+    rawUrl: string,
+    originPath: string
+}
 
 function createUrl(url: string): Partial<URL> {
     try {
@@ -10,23 +14,43 @@ function createUrl(url: string): Partial<URL> {
     }
 }
 
+function parse(params: string, options: {
+    arrayFormat: 'none' | 'bracket'
+} = {
+    arrayFormat: 'none'
+}) {
+    const searchParams = new URLSearchParams(params)
+    const { arrayFormat } = options
+
+    const arrayParams = (props : URLSearchParams) => {
+        const params: Record<string, any> = {}
+
+        for(const key of props.keys()) {
+            if(key.endsWith('[]'))  params[key.replace('[]', '')] = props.getAll(key);
+            else params[key] = props.get(key)!
+        }
+
+        return params
+    }
+
+    return arrayFormat === 'bracket' ? arrayParams(searchParams) : Object.fromEntries(searchParams)
+}
+
 /**
  * 
  * @param url 
  */
-export function useQueryString(url: string) {
-    const state = reactive<Record<string, ParsedQuery<string> | string>>({
-        hash: '',
-        query: '',
-        rawUrl: url,
+export function useQueryString(url: Ref<string>) {
+    const state = reactive<QueryStringState>({
+        query: {},
+        rawUrl: url.value,
         originPath: ''
     })
     const urlRef = ref<Partial<URL>>({})
 
     watch(url, (newValue) => {
        urlRef.value = createUrl(newValue)
-       state.query = parse(urlRef.value.search || '')
-       state.hash = parse(urlRef.value.hash || '')
+       state.query = parse(urlRef.value.search ?? '')
     }, {
         immediate: true
     })

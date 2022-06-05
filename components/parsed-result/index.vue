@@ -1,46 +1,60 @@
 <template>
-  <section class="origin__wrapper">
-    <div class="title">
-      host and path
-    </div>
-    <div
-      v-show="originPath"
-      class="origin__content"
-    >
-      {{ originPath }}
-      <button
-        class="origin--copy"
-      >
-        <component
-          :is="copied ? EvaCheckmarkOutline : EvaCopyOutline"
-          @click="handleCopy"
-        />
-      </button>
-    </div>
-  </section>
-  <section>
-    <div class="title">
-      query
-    </div>    
-    <ul
-      v-for="queryKey of Object.keys(query)"
-      :key="queryKey"
-      class="query__list"
-    >
-      <li
-        class="query__list-item"
-      >
-        <span class="query__key">{{ queryKey }}</span>
-        <span class="query__value">{{ query[queryKey] ?? '' }}</span>
-      </li>
-    </ul>
-  </section>
+  <client-only>
+    <template v-if="originPath">
+      <section class="origin__wrapper">
+        <div class="title">
+          host and path
+        </div>
+        <div
+          v-show="originPath"
+          class="origin__content"
+        >
+          {{ originPath }}
+          <button
+            class="origin--copy button--copy"
+          >
+            <component
+              :is="copied ? EvaCheckmarkOutline : EvaCopyOutline"
+              @click="startCopy"
+            />
+          </button>
+        </div>
+      </section>
+        <section v-if="Object.keys(query).length">
+          <div class="title">
+            <span>query</span>
+            <span class="query__copy">
+              Copy as JSON
+            <button class="button--copy">
+              <component
+                :is="queryCopied ? EvaCheckmarkOutline : EvaCopyOutline"
+                @click="startCopyQuery"
+              />
+            </button>
+            </span>
+          </div>    
+          <ul
+            v-for="queryKey of Object.keys(query)"
+            :key="queryKey"
+            class="query__list"
+          >
+            <li
+              class="query__list-item"
+            >
+              <span class="query__key">{{ queryKey }}</span>
+              <span class="query__value">{{ query?.[queryKey] ?? '' }}</span>
+            </li>
+          </ul>
+        </section>
+    </template>
+  </client-only>
 </template>
 
 <script lang="ts" setup>
 import EvaCopyOutline from '~icons/eva/copy-outline'
 import EvaCheckmarkOutline from '~icons/eva/checkmark-outline'
-import { useQueryString } from '../../composables/useQueryString'
+import { useQueryString } from '@/composables/useQueryString'
+import { useCopy } from '@/composables/useCopy'
 interface Props {
   url?: string
 }
@@ -49,38 +63,13 @@ const props = withDefaults(defineProps<Props>(), {
   url: ''
 })
 
-const { originPath, query = {}, hash } = useQueryString(toRef(props, 'url'))
+const { originPath, query = {} as Record<string, any> } = useQueryString(toRef(props, 'url'))
 
-const copied = ref<boolean>(false)
-const handleCopy = async () => {
-    if(copied.value === true) return
-    writeTextToClipboard(originPath.value)
-    copied.value = true
-    setTimeout(() => {
-        copied.value = false
-    }, 3000)
-}
+const { copied, startCopy } = useCopy<string>(originPath)
 
-const writeTextToClipboard = async (text: string) => {
-    const res = await navigator?.permissions?.query({ name: 'clipboard-write' })
-    if(res?.state === 'granted') {
-      await navigator.clipboard.writeText(text)
-      return;
-    }
-
-    // 降级
-    const input = document.createElement('input');
-    input.setAttribute('readonly', 'readonly');
-    input.setAttribute('value', text);
-    document.body.appendChild(input);
-    input.select()
-    // for ios
-    input.setSelectionRange(0, 9999);
-    if (document.execCommand('copy')) {
-        document.execCommand('copy');
-    }
-    document.body.removeChild(input);
-}
+const { copied: queryCopied, startCopy: startCopyQuery } = useCopy<Record<string, any>>(query, {
+  format: 'JSON'
+})
 </script>
 
 <script lang="ts">
@@ -91,8 +80,18 @@ export default {
 
 <style lang="less">
 .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 16px;
     opacity: 0.4;
+    margin: 16px 0;
+}
+
+.button--copy {
+    display: flex;
+    align-items: center;
+    transition: opacity 0.3s ease-in;
 }
 
 .origin {
@@ -125,14 +124,17 @@ export default {
     }
 
     &--copy {
-        opacity: 0;
-        display: flex;
-        align-items: center;
-        transition: opacity 0.3s ease-in;
+      opacity: 0;
     }
 }
 
 .query {
+    &__copy {
+      display: grid;
+      align-items: center;
+      grid-template-columns: 120px 1fr;
+    }
+
     &__list {
         &:not(:first-of-type) {
             border-top: 0;
