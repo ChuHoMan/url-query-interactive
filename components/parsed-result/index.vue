@@ -3,7 +3,7 @@
     <template v-if="originPath">
       <section class="origin__wrapper">
         <div class="title">
-          host and path
+          origin and path
         </div>
         <div
           v-show="originPath"
@@ -70,6 +70,13 @@ const { copied, startCopy } = useCopy<string>(originPath)
 const { copied: queryCopied, startCopy: startCopyQuery } = useCopy<Record<string, any>>(query, {
   format: 'JSON'
 })
+
+const { fetchJSON } = useTypeToJSON()
+// TODO fake module and page
+console.log(await fetchJSON({
+  module: '',
+  page: ''
+}))
 </script>
 
 <script lang="ts">
