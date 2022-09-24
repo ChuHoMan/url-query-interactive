@@ -32,19 +32,27 @@
               />
             </button>
             </span>
-          </div>    
-          <ul
-            v-for="queryKey of Object.keys(query)"
-            :key="queryKey"
-            class="query__list"
-          >
-            <li
-              class="query__list-item"
-            >
-              <span class="query__key">{{ queryKey }}</span>
-              <span class="query__value">{{ query?.[queryKey] ?? '' }}</span>
-            </li>
-          </ul>
+          </div>
+          <collapse v-model="collapseActiveKeys">
+            <collapse-item v-for="(queryKey, index) of Object.keys(query)"  :key="queryKey" :name="index">
+              <template #header="{ isActive, handleClickItem }">
+                <ul  class="query__list">
+                  <li
+                    class="query__list-item"
+                  >
+                    <span class="query__key">{{ queryKey }}</span>
+                    <div class="query__value__wrapper">
+                      <span class="query__value">{{ query?.[queryKey] ?? '' }}</span>
+                        <eva-chevron-down-outline :class="{'query-icon--active': isActive}" class="query-icon" @click="handleClickItem(index)"/>
+                    </div>
+                  </li>
+                </ul>
+              </template>
+              <div>
+                TODO 展开的内容
+              </div>
+            </collapse-item>
+          </collapse>    
         </section>
     </template>
   </client-only>
@@ -53,6 +61,7 @@
 <script lang="ts" setup>
 import EvaCopyOutline from '~icons/eva/copy-outline'
 import EvaCheckmarkOutline from '~icons/eva/checkmark-outline'
+import EvaChevronDownOutline from '~icons/eva/chevron-down-outline'
 import { useQueryString } from '@/composables/useQueryString'
 import { useCopy } from '@/composables/useCopy'
 interface Props {
@@ -72,6 +81,7 @@ const { copied: queryCopied, startCopy: startCopyQuery } = useCopy<Record<string
 })
 
 const { fetchJSON } = useTypeToJSON()
+const collapseActiveKeys = ref<number[]>([0])
 // TODO fake module and page
 console.log(await fetchJSON({
   module: '',
@@ -143,11 +153,7 @@ export default {
     }
 
     &__list {
-        &:not(:first-of-type) {
-            border-top: 0;
-        }
-        border: 1px solid var(--border-color);
-        padding: 8px 16px;
+        padding: 8px 4px 8px 16px;
         &-item {
             display: flex;
             flex-direction: column;
@@ -161,6 +167,23 @@ export default {
     &__value {
         opacity: 0.5;
         word-wrap: break-word;
+
+        &__wrapper {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        
+        }
+    }
+
+    &-icon {
+      font-size: 20px;
+      transition: transform .3s;
+      cursor: pointer;
+
+      &--active {
+        transform: rotate(180deg);
+      }
     }
 }
 </style>

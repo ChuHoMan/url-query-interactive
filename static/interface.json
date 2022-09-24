@@ -63,7 +63,9 @@
 					"name": "memberB",
 					"kind": 1024,
 					"kindString": "Property",
-					"flags": {},
+					"flags": {
+						"isOptional": true
+					},
 					"sources": [
 						{
 							"fileName": "interface.ts",

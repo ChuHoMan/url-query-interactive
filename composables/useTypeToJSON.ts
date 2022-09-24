@@ -21,6 +21,10 @@ interface ParsedJSONMember {
      */
     type: string
     /**
+     * 是否可选
+     */
+    isOptional: boolean
+    /**
      * 注释
      */
     commonets: ParsedJSONCommonet
@@ -94,6 +98,7 @@ function traveseChildren(nodes: Record<string, any>[]) {
         resolvedChildren.push({
             key: node.name,
             type: node.type?.name || 'unknown',
+            isOptional: node.flags?.isOptional ?? false,
             commonets: parseComment(node.comment ?? {})
         })
     }
@@ -127,7 +132,6 @@ export function useTypeToJSON() {
         const { module = '', page = '' } = options
         // TODO fetch remote json
         const rawJson = await (await import('../static/interface.json')).default
-        console.log(rawJson)
         try {
             return parseJSON(rawJson)
         } catch (e) {
