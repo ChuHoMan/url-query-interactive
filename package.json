@@ -7,22 +7,22 @@
   "packageManager": "pnpm@7.1.8",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev -p 9000",
     "generate": "nuxt generate",
     "preview": "nuxt preview"
   },
   "dependencies": {},
   "devDependencies": {
     "@iconify-json/eva": " ^1.1.2",
-    "@typescript-eslint/eslint-plugin": " ^5.35.1",
-    "@typescript-eslint/parser": "^5.35.1",
-    "@vueuse/nuxt": "^9.1.1",
+    "@typescript-eslint/eslint-plugin": " ^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
+    "@vueuse/nuxt": "^9.2.0",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-vue": "^8.7.1",
     "less": "^4.1.3",
-    "nuxt": "3.0.0-rc.8",
-    "typescript": "^4.8.2",
-    "unplugin-icons": "^0.14.8"
+    "nuxt": "3.0.0-rc.11",
+    "typescript": "^4.8.3",
+    "unplugin-icons": "^0.14.10"
   }
 }

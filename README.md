@@ -4,6 +4,11 @@
 
 ## DEMO
 ![demo](https://github.com/ChuHoMan/url-query-interactive/blob/main/examples/demo.png)
+
+## Feature TODO list
+- [] display type comment
+- [] support delete query param
+- [] support edit query param
 ## Setup
 
 Make sure to install the dependencies:
