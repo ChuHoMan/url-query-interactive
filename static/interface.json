@@ -1,145 +1,165 @@
 {
-	"id": 0,
-	"name": "type2json",
-	"kind": 1,
-	"kindString": "Project",
-	"flags": {},
-	"originalName": "",
-	"children": [
-		{
-			"id": 2,
-			"name": "default",
-			"kind": 256,
-			"kindString": "Interface",
-			"flags": {},
-			"comment": {
-				"summary": [
-					{
-						"kind": "text",
-						"text": "simple interface comment\nhello"
-					}
-				]
-			},
-			"children": [
-				{
-					"id": 3,
-					"name": "memberA",
-					"kind": 1024,
-					"kindString": "Property",
-					"flags": {},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "memberA comment"
-							}
-						],
-						"blockTags": [
-							{
-								"tag": "@default",
-								"content": [
-									{
-										"kind": "text",
-										"text": "'defaultValue'"
-									}
-								]
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "interface.ts",
-							"line": 13,
-							"character": 4
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 4,
-					"name": "memberB",
-					"kind": 1024,
-					"kindString": "Property",
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "interface.ts",
-							"line": 15,
-							"character": 4
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "number"
-					}
-				}
-			],
-			"groups": [
-				{
-					"title": "Properties",
-					"children": [
-						3,
-						4
-					]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "interface.ts",
-					"line": 8,
-					"character": 17
-				}
-			]
-		},
-		{
-			"id": 1,
-			"name": "typeB",
-			"kind": 4194304,
-			"kindString": "Type alias",
-			"flags": {},
-			"comment": {
-				"summary": [
-					{
-						"kind": "text",
-						"text": "TypeB comment"
-					}
-				]
-			},
-			"sources": [
-				{
-					"fileName": "interface.ts",
-					"line": 2,
-					"character": 12
-				}
-			],
-			"type": {
-				"type": "intrinsic",
-				"name": "number"
-			}
-		}
-	],
-	"groups": [
-		{
-			"title": "Interfaces",
-			"children": [
-				2
-			]
-		},
-		{
-			"title": "Type Aliases",
-			"children": [
-				1
-			]
-		}
-	],
-	"sources": [
-		{
-			"fileName": "interface.ts",
-			"line": 2,
-			"character": 0
-		}
-	]
+  "id": 0,
+  "name": "type2json",
+  "kind": 1,
+  "kindString": "Project",
+  "flags": {},
+  "originalName": "",
+  "children": [
+    {
+      "id": 2,
+      "name": "default",
+      "kind": 256,
+      "kindString": "Interface",
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "simple interface comment\nhello"
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 3,
+          "name": "memberA",
+          "kind": 1024,
+          "kindString": "Property",
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "memberA comment"
+              }
+            ],
+            "blockTags": [
+              {
+                "tag": "@default",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "'defaultValue'"
+                  }
+                ]
+              },
+              {
+                "tag": "@source",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "PM"
+                  }
+                ]
+              },
+              {
+                "tag": "@case",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "history case"
+                  }
+                ]
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "interface.ts",
+              "line": 13,
+              "character": 4
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 4,
+          "name": "memberB",
+          "kind": 1024,
+          "kindString": "Property",
+          "flags": {
+            "isOptional": true
+          },
+          "sources": [
+            {
+              "fileName": "interface.ts",
+              "line": 15,
+              "character": 4
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            3,
+            4
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "interface.ts",
+          "line": 8,
+          "character": 17
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "typeB",
+      "kind": 4194304,
+      "kindString": "Type alias",
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "TypeB comment"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "fileName": "interface.ts",
+          "line": 2,
+          "character": 12
+        }
+      ],
+      "type": {
+        "type": "intrinsic",
+        "name": "number"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "title": "Interfaces",
+      "children": [
+        2
+      ]
+    },
+    {
+      "title": "Type Aliases",
+      "children": [
+        1
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "fileName": "interface.ts",
+      "line": 2,
+      "character": 0
+    }
+  ]
 }

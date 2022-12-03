@@ -1,3 +1,54 @@
+<script lang="ts" setup>
+import EvaCopyOutline from '~icons/eva/copy-outline';
+import EvaCheckmarkOutline from '~icons/eva/checkmark-outline';
+import EvaChevronDownOutline from '~icons/eva/chevron-down-outline';
+import { useQueryString } from '@/composables/useQueryString';
+import { useCopy } from '@/composables/useCopy';
+interface Props {
+  url?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  url: '',
+});
+
+const { originPath, query = {} as Record<string, any> } = useQueryString(toRef(props, 'url'));
+
+const { copied, startCopy } = useCopy<string>(originPath);
+
+const { copied: queryCopied, startCopy: startCopyQuery } = useCopy<Record<string, any>>(query, {
+  format: 'JSON',
+});
+
+const collapseActiveKeys = ref<number[]>([0]);
+
+// TODO fake module and page
+const { fetchJSON, parsedPageQueryJSON } = useTypeToJSON();
+
+await fetchJSON({
+  module: '',
+  page: '',
+});
+
+const previewPageQueryJSON = computed(() => {
+  return parsedPageQueryJSON.value?.children.filter((child) => {
+    return query.value[child.key];
+  });
+});
+
+const previewPargeQueryBlockTags = computed(() => {
+  return function (queryKey: string = '') {
+    return previewPageQueryJSON.value.find(c => c.key === queryKey)?.commonets!.blockTags
+  }
+})
+</script>
+
+<script lang="ts">
+export default {
+  name: 'ParsedResult',
+};
+</script>
+
 <template>
   <client-only>
     <template v-if="originPath">
@@ -20,70 +71,59 @@
           </button>
         </div>
       </section>
-        <section v-if="Object.keys(query).length">
-          <div class="title">
-            <span>query</span>
-            <span class="query__copy">
-              Copy as JSON
+      <section v-if="Object.keys(query).length">
+        <div class="title">
+          <span>query</span>
+          <span class="query__copy">
+            Copy as JSON
             <button class="button--copy">
               <component
                 :is="queryCopied ? EvaCheckmarkOutline : EvaCopyOutline"
                 @click="startCopyQuery"
               />
             </button>
-            </span>
-          </div>    
-          <ul
-            v-for="queryKey of Object.keys(query)"
-            :key="queryKey"
-            class="query__list"
-          >
-            <li
-              class="query__list-item"
-            >
-              <span class="query__key">{{ queryKey }}</span>
-              <span class="query__value">{{ query?.[queryKey] ?? '' }}</span>
-            </li>
-          </ul>
-        </section>
+          </span>
+        </div>
+        <collapse v-model="collapseActiveKeys">
+          <collapse-item v-for="(queryKey, index) of Object.keys(query)" :key="queryKey" :name="index">
+            <template #header="{ isActive, handleClickItem }">
+              <ul class="query__list">
+                <li
+                  class="query__list-item"
+                >
+                  <span class="query__key">{{ queryKey }}</span>
+                  <div class="query__value__wrapper">
+                    <span class="query__value">{{ query?.[queryKey] ?? '' }}</span>
+                    <eva-chevron-down-outline 
+                    :class="{ 'query-icon--active': isActive }" 
+                    class="query-icon" 
+                    @click="handleClickItem(index)" 
+                    v-if="isNotNullArrary(previewPargeQueryBlockTags(queryKey))"
+                    />
+                  </div>
+                </li>
+              </ul>
+            </template>
+            <div v-if="isNotNullArrary(previewPargeQueryBlockTags(queryKey))">
+              <div 
+              v-for="blockTag of previewPargeQueryBlockTags(queryKey)" 
+                :key="blockTag.tag" 
+                class="collapse-item__box"
+              >
+                <div class="collapse-item__box__title">
+                  {{ getPreviewTagName(blockTag.tag) }}
+                </div>
+                <div class="collapse-item__box__main">
+                  {{ blockTag.text }}
+                </div>
+              </div>
+            </div>
+          </collapse-item>
+        </collapse>
+      </section>
     </template>
   </client-only>
 </template>
-
-<script lang="ts" setup>
-import EvaCopyOutline from '~icons/eva/copy-outline'
-import EvaCheckmarkOutline from '~icons/eva/checkmark-outline'
-import { useQueryString } from '@/composables/useQueryString'
-import { useCopy } from '@/composables/useCopy'
-interface Props {
-  url?: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  url: ''
-})
-
-const { originPath, query = {} as Record<string, any> } = useQueryString(toRef(props, 'url'))
-
-const { copied, startCopy } = useCopy<string>(originPath)
-
-const { copied: queryCopied, startCopy: startCopyQuery } = useCopy<Record<string, any>>(query, {
-  format: 'JSON'
-})
-
-const { fetchJSON } = useTypeToJSON()
-// TODO fake module and page
-console.log(await fetchJSON({
-  module: '',
-  page: ''
-}))
-</script>
-
-<script lang="ts">
-export default {
-    name: 'ParsedResult'
-};
-</script>
 
 <style lang="less">
 .title {
@@ -114,7 +154,7 @@ export default {
         font-weight: 200;
     }
 
-    &__content { 
+    &__content {
         box-sizing: border-box;
         display: flex;
         align-items: center;
@@ -143,11 +183,7 @@ export default {
     }
 
     &__list {
-        &:not(:first-of-type) {
-            border-top: 0;
-        }
-        border: 1px solid var(--border-color);
-        padding: 8px 16px;
+        padding: 8px 4px 8px 16px;
         &-item {
             display: flex;
             flex-direction: column;
@@ -161,6 +197,34 @@ export default {
     &__value {
         opacity: 0.5;
         word-wrap: break-word;
+
+        &__wrapper {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+        }
     }
+
+    &-icon {
+      font-size: 20px;
+      transition: transform .3s;
+      cursor: pointer;
+
+      &--active {
+        transform: rotate(180deg);
+      }
+    }
+}
+
+.collapse-item__box {
+  padding: 4px 0 4px;
+  &__title {
+    font-size: 14px;
+  }
+
+  &__main {
+    opacity: 0.4;
+  }
 }
 </style>

@@ -1,3 +1,23 @@
+<script lang="ts" setup>
+import { computedInputModel } from '../composables/state';
+import EvaCloseOutline from '~icons/eva/close-outline';
+
+const inputEl = ref<HTMLInputElement>();
+
+const clear = () => {
+  computedInputModel.value = '';
+  nextTick().then(() => {
+    inputEl.value?.focus();
+  });
+};
+</script>
+
+<script lang="ts">
+export default {
+  name: 'Search',
+};
+</script>
+
 <template>
   <div class="input__wrapper">
     <input
@@ -17,26 +37,6 @@
     </button>
   </div>
 </template>
-
-<script lang="ts" setup>
-import EvaCloseOutline from '~icons/eva/close-outline'
-import { computedInputModel } from '../composables/state';
-
-const inputEl = ref<HTMLInputElement>()
-
-const clear = () => {
-  computedInputModel.value = ''
-  nextTick().then(() => {
-    inputEl.value?.focus()
-  })
-}
-</script>
-
-<script lang="ts">
-export default {
-    name: 'Search'
-}
-</script>
 
 <style lang="less" scoped>
 .input {

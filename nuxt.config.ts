@@ -1,15 +1,18 @@
-import { defineNuxtConfig } from 'nuxt'
-
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-    app: {
-        baseURL: '/url-query-interactive/'
+  app: {
+    baseURL: '/url-query-interactive/',
+  },
+  typescript: {
+    shim: false,
+    tsConfig: {
+      compilerOptions: {
+        types: ['unplugin-icons/types/vue'],
+      },
     },
-    typescript: {
-        shim: false
-    },
-    modules: [
-        ['unplugin-icons/nuxt', {}],
-        '@vueuse/nuxt'
-    ]
-})
+  },
+  modules: [
+    ['unplugin-icons/nuxt', {}],
+    '@vueuse/nuxt',
+  ],
+});

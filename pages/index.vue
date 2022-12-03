@@ -1,3 +1,13 @@
+<script lang="ts" setup>
+import { computedInputModel } from '../composables/state';
+</script>
+
+<script lang="ts">
+export default {
+  name: 'Index',
+};
+</script>
+
 <template>
   <main class="app__main">
     <div class="app__left">
@@ -9,16 +19,6 @@
     </div>
   </main>
 </template>
-
-<script lang="ts">
-export default {
-    name: 'Index'
-}
-</script>
-
-<script lang="ts" setup>
-import { computedInputModel } from '../composables/state';
-</script>
 
 <style lang="less">
 @import "./index.less";
