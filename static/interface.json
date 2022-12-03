@@ -43,6 +43,24 @@
                     "text": "'defaultValue'"
                   }
                 ]
+              },
+              {
+                "tag": "@source",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "PM"
+                  }
+                ]
+              },
+              {
+                "tag": "@case",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "history case"
+                  }
+                ]
               }
             ]
           },

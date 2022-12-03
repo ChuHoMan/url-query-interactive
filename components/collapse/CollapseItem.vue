@@ -32,7 +32,7 @@ export default {
     <div>
       <transition name="collapse">
         <div v-show="isActive" class="collapse-item__wrapper">
-          <slot />
+          <slot v-if="$slots.default" />
         </div>
       </transition>
     </div>
@@ -56,6 +56,7 @@ export default {
         will-change: height;
         overflow: hidden;
         box-sizing: border-box;
+        padding: 0 32px;
         border: 1px solid var(--border-color);
     }
 }

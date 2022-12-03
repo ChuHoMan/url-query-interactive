@@ -45,6 +45,9 @@ interface ParsedJSONMember {
     commonets: ParsedJSONCommonet
 }
 
+/**
+ * 解析后 query JSON
+ */
 export interface ParsedJSON {
     /**
      *
@@ -106,12 +109,18 @@ function traveseChildren(nodes: Record<string, any>[]) {
  * 解析 schema 返回对象
  */
 export function useTypeToJSON() {
+  const defaultParsedJSON: ParsedJSON = {
+    kindString: 'interface',
+    summaryText: '',
+    children: []
+  }
+
   // TODO 完善类型
-  function parseJSON(raw: Record<string, any>) {
+  function parseJSON(raw: Record<string, any>): ParsedJSON {
     if (!isObject(raw)) throw new Error(`json not a object, can not parse: ${raw}`);
 
     if (!checkJSONValidity(raw))
-      return {};
+      return defaultParsedJSON;
 
     const defaultExportJSON = (raw.children as Record<string, any>[])!.find(item => item.name === 'default')!;
     const parsedJSON: ParsedJSON = {
@@ -123,12 +132,17 @@ export function useTypeToJSON() {
     return parsedJSON;
   }
 
+  const parsedPageQueryJSON = ref<ParsedJSON>({
+    ...defaultParsedJSON
+  });
+
   async function fetchJSON(options: FetchJSONOptions) {
     const { module = '', page = '' } = options;
     // TODO fetch remote json
     const rawJson = await (await import('../static/interface.json')).default;
     try {
-      return parseJSON(rawJson);
+      parsedPageQueryJSON.value = parseJSON(rawJson);
+      return parsedPageQueryJSON.value;
     }
     catch (e) {
       console.error('[parsed error]', (e as any).message);
@@ -137,5 +151,6 @@ export function useTypeToJSON() {
 
   return {
     fetchJSON,
+    parsedPageQueryJSON,
   };
 }

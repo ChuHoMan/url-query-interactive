@@ -4,7 +4,7 @@
     "strict": true,
     "strictNullChecks": true,
     "types": [
-      "unplugin-icons/types/vue",
+      "unplugin-icons/types/vue"
     ]
   }
 }

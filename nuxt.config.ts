@@ -7,9 +7,9 @@ export default defineNuxtConfig({
     shim: false,
     tsConfig: {
       compilerOptions: {
-          types: ["unplugin-icons/types/vue"]
-      }
-    }
+        types: ['unplugin-icons/types/vue'],
+      },
+    },
   },
   modules: [
     ['unplugin-icons/nuxt', {}],

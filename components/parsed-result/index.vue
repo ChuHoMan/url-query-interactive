@@ -20,13 +20,27 @@ const { copied: queryCopied, startCopy: startCopyQuery } = useCopy<Record<string
   format: 'JSON',
 });
 
-const { fetchJSON } = useTypeToJSON();
 const collapseActiveKeys = ref<number[]>([0]);
+
 // TODO fake module and page
-console.log(await fetchJSON({
+const { fetchJSON, parsedPageQueryJSON } = useTypeToJSON();
+
+await fetchJSON({
   module: '',
   page: '',
-}));
+});
+
+const previewPageQueryJSON = computed(() => {
+  return parsedPageQueryJSON.value?.children.filter((child) => {
+    return query.value[child.key];
+  });
+});
+
+const previewPargeQueryBlockTags = computed(() => {
+  return function (queryKey: string = '') {
+    return previewPageQueryJSON.value.find(c => c.key === queryKey)?.commonets!.blockTags
+  }
+})
 </script>
 
 <script lang="ts">
@@ -80,15 +94,29 @@ export default {
                   <span class="query__key">{{ queryKey }}</span>
                   <div class="query__value__wrapper">
                     <span class="query__value">{{ query?.[queryKey] ?? '' }}</span>
-                    <eva-chevron-down-outline :class="{ 'query-icon--active': isActive }" class="query-icon" @click="handleClickItem(index)" />
+                    <eva-chevron-down-outline 
+                    :class="{ 'query-icon--active': isActive }" 
+                    class="query-icon" 
+                    @click="handleClickItem(index)" 
+                    v-if="isNotNullArrary(previewPargeQueryBlockTags(queryKey))"
+                    />
                   </div>
                 </li>
               </ul>
             </template>
-            <div>
-              参数来源：产品
-              参数含义：这是含义
-              历史case：case12233
+            <div v-if="isNotNullArrary(previewPargeQueryBlockTags(queryKey))">
+              <div 
+              v-for="blockTag of previewPargeQueryBlockTags(queryKey)" 
+                :key="blockTag.tag" 
+                class="collapse-item__box"
+              >
+                <div class="collapse-item__box__title">
+                  {{ getPreviewTagName(blockTag.tag) }}
+                </div>
+                <div class="collapse-item__box__main">
+                  {{ blockTag.text }}
+                </div>
+              </div>
             </div>
           </collapse-item>
         </collapse>
@@ -187,5 +215,16 @@ export default {
         transform: rotate(180deg);
       }
     }
+}
+
+.collapse-item__box {
+  padding: 4px 0 4px;
+  &__title {
+    font-size: 14px;
+  }
+
+  &__main {
+    opacity: 0.4;
+  }
 }
 </style>
