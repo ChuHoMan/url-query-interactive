@@ -37,10 +37,10 @@ const previewPageQueryJSON = computed(() => {
 });
 
 const previewPargeQueryBlockTags = computed(() => {
-  return function (queryKey: string = '') {
-    return previewPageQueryJSON.value.find(c => c.key === queryKey)?.commonets!.blockTags
-  }
-})
+  return function (queryKey = '') {
+    return previewPageQueryJSON.value.find(c => c.key === queryKey)?.commonets!.blockTags;
+  };
+});
 </script>
 
 <script lang="ts">
@@ -94,20 +94,20 @@ export default {
                   <span class="query__key">{{ queryKey }}</span>
                   <div class="query__value__wrapper">
                     <span class="query__value">{{ query?.[queryKey] ?? '' }}</span>
-                    <eva-chevron-down-outline 
-                    :class="{ 'query-icon--active': isActive }" 
-                    class="query-icon" 
-                    @click="handleClickItem(index)" 
-                    v-if="isNotNullArrary(previewPargeQueryBlockTags(queryKey))"
+                    <eva-chevron-down-outline
+                      v-if="isNotNullArrary(previewPargeQueryBlockTags(queryKey))"
+                      :class="{ 'query-icon--active': isActive }"
+                      class="query-icon"
+                      @click="handleClickItem(index)"
                     />
                   </div>
                 </li>
               </ul>
             </template>
             <div v-if="isNotNullArrary(previewPargeQueryBlockTags(queryKey))">
-              <div 
-              v-for="blockTag of previewPargeQueryBlockTags(queryKey)" 
-                :key="blockTag.tag" 
+              <div
+                v-for="blockTag of previewPargeQueryBlockTags(queryKey)"
+                :key="blockTag.tag"
                 class="collapse-item__box"
               >
                 <div class="collapse-item__box__title">

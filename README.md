@@ -6,7 +6,7 @@
 ![demo](https://github.com/ChuHoMan/url-query-interactive/blob/main/examples/demo.png)
 
 ## Feature TODO list
-- [] display type comment
+- [X] display type comment
 - [] support delete query params (single and multiple)
 - [] support edit query param
 ## Setup

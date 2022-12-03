@@ -4,5 +4,5 @@ export const ensureArray = <T>(arr: T | ReadonlyArray<T>): T[] => {
 };
 
 export const isNotNullArrary = (val: unknown): boolean => {
-  return Array.isArray(val) && val.length > 0
-}
+  return Array.isArray(val) && val.length > 0;
+};
