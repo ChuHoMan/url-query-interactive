@@ -115,7 +115,6 @@ export function useTypeToJSON() {
     children: []
   }
 
-  // TODO 完善类型
   function parseJSON(raw: Record<string, any>): ParsedJSON {
     if (!isObject(raw)) throw new Error(`json not a object, can not parse: ${raw}`);
 
