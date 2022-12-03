@@ -1,3 +1,13 @@
+<script lang="ts" setup>
+import DarkToggle from './DarkToggle.vue';
+</script>
+
+<script lang="ts">
+export default {
+  name: 'TheNav',
+};
+</script>
+
 <template>
   <header class="nav__container">
     <div class="nav__desc">
@@ -5,20 +15,10 @@
       <span class="nav__desc-cn">交互式查看 url query</span>
     </div>
     <div class="nav__icons">
-      <DarkToggle />
+      <dark-toggle />
     </div>
   </header>
 </template>
-
-<script lang="ts">
-export default {
-    name: 'TheNav'
-}
-</script>
-
-<script lang="ts" setup>
-import DarkToggle from './DarkToggle.vue';
-</script>
 
 <style lang="less" scoped>
 .nav {

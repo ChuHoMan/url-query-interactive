@@ -1,19 +1,19 @@
-<template>
-  <NuxtPage />
-</template>
-
 <script setup lang="ts">
 useHead({
   title: 'Interactive Url Query',
   meta: [{
     name: 'description',
-    content: 'url query interact.'
+    content: 'url query interact.',
   }],
   link: [
-    { rel: 'icon', type: 'image/svg+xml', href: '/url-query-interactive/favicon.svg' }
+    { rel: 'icon', type: 'image/svg+xml', href: '/url-query-interactive/favicon.svg' },
   ],
-})
+});
 </script>
+
+<template>
+  <NuxtPage />
+</template>
 
 <style>
 @import './styles/reset.css';

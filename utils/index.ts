@@ -1,3 +1,3 @@
-export * from './validator'
-export * from './vue'
-export * from './array'
+export * from './validator';
+export * from './vue';
+export * from './array';
