@@ -8,7 +8,7 @@
 ## Feature TODO list
 - [X] display type comment
 - [] support delete query params (single and multiple)
-- [] support edit query param
+- [X] support edit query param
 ## Setup
 
 Make sure to install the dependencies:

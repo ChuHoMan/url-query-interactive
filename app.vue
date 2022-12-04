@@ -15,9 +15,9 @@ useHead({
   <NuxtPage />
 </template>
 
-<style>
-@import './styles/reset.css';
-@import './styles/variables.css';
+<style lang="less">
+@import '@/assets/styles/reset.css';
+@import '@/assets/styles/variables.css';
 
 html, body , #__nuxt {
   height: 100vh;

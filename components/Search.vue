@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computedInputModel } from '../composables/state';
 import EvaCloseOutline from '~icons/eva/close-outline';
+import { ProvideQueryState } from '@/types/index';
 
 const inputEl = ref<HTMLInputElement>();
 
@@ -10,6 +11,9 @@ const clear = () => {
     inputEl.value?.focus();
   });
 };
+
+const { isEditingQuery } = inject<ProvideQueryState>(QUERY_STATE_KEY)!;
+console.log({ isEditingQuery });
 </script>
 
 <script lang="ts">
@@ -27,6 +31,7 @@ export default {
       aria-label="输入 URL"
       placeholder="输入 URL"
       autocomplete="off"
+      :disabled="isEditingQuery"
     >
     <button
       v-show="computedInputModel"

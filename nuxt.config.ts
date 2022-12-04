@@ -11,8 +11,22 @@ export default defineNuxtConfig({
       },
     },
   },
+  experimental: {
+    inlineSSRStyles: false,
+  },
   modules: [
     ['unplugin-icons/nuxt', {}],
     '@vueuse/nuxt',
   ],
+  vite: {
+    css: {
+      preprocessorOptions: {
+        less: {
+          additionalData: `
+                  @import "@/assets/styles/basic.less";
+          `,
+        },
+      },
+    },
+  },
 });
