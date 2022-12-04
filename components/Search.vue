@@ -13,7 +13,6 @@ const clear = () => {
 };
 
 const { isEditingQuery } = inject<ProvideQueryState>(QUERY_STATE_KEY)!;
-console.log({ isEditingQuery });
 </script>
 
 <script lang="ts">
