@@ -112,8 +112,8 @@ export function useTypeToJSON() {
   const defaultParsedJSON: ParsedJSON = {
     kindString: 'interface',
     summaryText: '',
-    children: []
-  }
+    children: [],
+  };
 
   function parseJSON(raw: Record<string, any>): ParsedJSON {
     if (!isObject(raw)) throw new Error(`json not a object, can not parse: ${raw}`);
@@ -132,7 +132,7 @@ export function useTypeToJSON() {
   }
 
   const parsedPageQueryJSON = ref<ParsedJSON>({
-    ...defaultParsedJSON
+    ...defaultParsedJSON,
   });
 
   async function fetchJSON(options: FetchJSONOptions) {

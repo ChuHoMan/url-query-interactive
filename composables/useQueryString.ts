@@ -1,4 +1,6 @@
 import { Ref, reactive, toRefs, watch } from 'vue';
+import { QUERY_STATUS, QueryStatus } from '~~/components/parsed-result/utils';
+import { ProvideQueryState } from '@/types/index';
 
 interface QueryStringState {
     query: Record<string, string>
@@ -9,8 +11,7 @@ interface QueryStringState {
 function createUrl(url: string): Partial<URL> {
   try {
     return new URL(url);
-  }
-  catch (e) {
+  } catch (e) {
     return {};
   }
 }
@@ -41,13 +42,24 @@ function parse(params: string, options: {
  *
  * @param url
  */
-export function useQueryString(url: Ref<string>) {
+export function useQueryString(url: Ref<string>, emit: any) {
   const state = reactive<QueryStringState>({
     query: {},
     rawUrl: url.value,
     originPath: '',
   });
   const urlRef = ref<Partial<URL>>({});
+  const { updateIsEditingQuery } = inject<ProvideQueryState>(QUERY_STATE_KEY)!;
+
+  const status = ref<QueryStatus[]>(Array.from({
+    length: Object.keys(state.query).length,
+  }).fill(QUERY_STATUS.PREVIEW) as QueryStatus[]);
+
+  const isEditQueryState = ref(false);
+  watchEffect(() => {
+    const isEditing = status.value.includes(QUERY_STATUS.EDIT);
+    updateIsEditingQuery(isEditing);
+  });
 
   watch(url, (newValue) => {
     urlRef.value = createUrl(newValue);
@@ -63,8 +75,18 @@ export function useQueryString(url: Ref<string>) {
     return `${urlRef.value!.origin}${urlRef.value!.pathname}`;
   });
 
+  watch(() => state.query, (newValue, oldValue) => {
+    console.log(newValue, oldValue);
+    if (isObject(newValue) && isObject(oldValue) && Object.keys(newValue).length > 0 && Object.keys(oldValue).length > 0 && isEditQueryState.value)
+      emit('query-changed', newValue, urlRef.value);
+  }, {
+    deep: true,
+  });
+
   return {
     ...toRefs(state),
     originPath,
+    status,
+    isEditQueryState,
   };
 }

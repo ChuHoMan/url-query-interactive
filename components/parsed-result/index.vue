@@ -1,7 +1,11 @@
 <script lang="ts" setup>
+import { QUERY_STATUS, QueryStatus } from './utils';
 import EvaCopyOutline from '~icons/eva/copy-outline';
 import EvaCheckmarkOutline from '~icons/eva/checkmark-outline';
 import EvaChevronDownOutline from '~icons/eva/chevron-down-outline';
+import EvaEdit2Fill from '~icons/eva/edit-2-fill';
+import EvaTrash2Fill from '~icons/eva/trash-2-fill';
+import EvaSaveFill from '~icons/eva/save-fill';
 import { useQueryString } from '@/composables/useQueryString';
 import { useCopy } from '@/composables/useCopy';
 interface Props {
@@ -12,7 +16,9 @@ const props = withDefaults(defineProps<Props>(), {
   url: '',
 });
 
-const { originPath, query = {} as Record<string, any> } = useQueryString(toRef(props, 'url'));
+const emit = defineEmits(['query-changed']);
+
+const { originPath, query = {} as Record<string, any>, status } = useQueryString(toRef(props, 'url'), emit);
 
 const { copied, startCopy } = useCopy<string>(originPath);
 
@@ -37,10 +43,37 @@ const previewPageQueryJSON = computed(() => {
 });
 
 const previewPargeQueryBlockTags = computed(() => {
-  return function (queryKey: string = '') {
-    return previewPageQueryJSON.value.find(c => c.key === queryKey)?.commonets!.blockTags
+  return function (queryKey = '') {
+    return previewPageQueryJSON.value.find(c => c.key === queryKey)?.commonets!.blockTags;
+  };
+});
+
+const queryState = reactive<{
+ elRefs: HTMLElement[]
+   }>({
+     elRefs: Array.from({
+       length: Object.keys(query.value).length,
+     }),
+   });
+
+const toggleStatus = (_status: QueryStatus, index: number) => {
+  status.value[index] = _status;
+  if (status.value[index] === QUERY_STATUS.EDIT) {
+    nextTick(() => {
+      queryState.elRefs[index].focus();
+    });
   }
-})
+};
+
+const isEditStatusComp = computed(() => {
+  return function (index: number) {
+    return status.value[index] === QUERY_STATUS.EDIT;
+  };
+});
+
+function handleEditQuery(e: Event, queryKey: string) {
+  query.value[queryKey] = (e.target as any).textContent;
+}
 </script>
 
 <script lang="ts">
@@ -91,23 +124,50 @@ export default {
                 <li
                   class="query__list-item"
                 >
-                  <span class="query__key">{{ queryKey }}</span>
+                  <span class="query__key__wrapper">
+                    <div class="query__key">
+                      {{ queryKey }}
+                    </div>
+                    <div class="query__key--right">
+                      <eva-save-fill
+                        v-if="isEditStatusComp(index)"
+                        class="operation-icon"
+                        @click="toggleStatus(QUERY_STATUS.PREVIEW, index)"
+                      />
+                      <eva-edit2-fill
+                        v-else
+                        class="operation-icon"
+                        @click="toggleStatus(QUERY_STATUS.EDIT, index)"
+                      />
+                      <eva-trash-2-fill style="color: var(--danger-color)" class="operation-icon" />
+                    </div>
+                  </span>
                   <div class="query__value__wrapper">
-                    <span class="query__value">{{ query?.[queryKey] ?? '' }}</span>
-                    <eva-chevron-down-outline 
-                    :class="{ 'query-icon--active': isActive }" 
-                    class="query-icon" 
-                    @click="handleClickItem(index)" 
-                    v-if="isNotNullArrary(previewPargeQueryBlockTags(queryKey))"
+                    <span
+                      :ref="(el) => queryState.elRefs[index] = el as any"
+                      class="query__value"
+                      :class="[{
+                        'query__value--edit': status[index] === QUERY_STATUS.EDIT,
+                      }]"
+                      :contenteditable="status[index] === QUERY_STATUS.EDIT"
+                      @input="handleEditQuery($event, queryKey)"
+                    >
+                      {{ query[queryKey] ?? '' }}
+                    </span>
+                    <eva-chevron-down-outline
+                      v-if="isNotNullArrary(previewPargeQueryBlockTags(queryKey))"
+                      :class="{ 'query-icon--active': isActive }"
+                      class="query-icon"
+                      @click="handleClickItem(index)"
                     />
                   </div>
                 </li>
               </ul>
             </template>
             <div v-if="isNotNullArrary(previewPargeQueryBlockTags(queryKey))">
-              <div 
-              v-for="blockTag of previewPargeQueryBlockTags(queryKey)" 
-                :key="blockTag.tag" 
+              <div
+                v-for="blockTag of previewPargeQueryBlockTags(queryKey)"
+                :key="blockTag.tag"
                 class="collapse-item__box"
               >
                 <div class="collapse-item__box__title">
@@ -191,19 +251,51 @@ export default {
     }
 
     &__key {
-      opacity: 0.8;
+
+      &__wrapper {
+        opacity: 0.8;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      &--right {
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+
+        .operation-icon {
+          .basic-icon;
+            &:hover {
+              opacity: 0.4;
+            }
+        }
+      }
     }
 
     &__value {
         opacity: 0.5;
         word-wrap: break-word;
+        padding: 6px 12px;
+
+        &--edit {
+          cursor: pointer;
+        }
 
         &__wrapper {
           display: flex;
           justify-content: space-between;
           align-items: center;
-
         }
+
+      &:empty::before {
+        content: '请输入 query 值'
+      }
+
+      &:focus-visible {
+        cursor: text;
+        outline: var(--border-color) auto 1px;
+      }
     }
 
     &-icon {
