@@ -142,8 +142,7 @@ export function useTypeToJSON() {
     try {
       parsedPageQueryJSON.value = parseJSON(rawJson);
       return parsedPageQueryJSON.value;
-    }
-    catch (e) {
+    } catch (e) {
       console.error('[parsed error]', (e as any).message);
     }
   }

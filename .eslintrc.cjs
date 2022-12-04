@@ -13,6 +13,6 @@ module.exports = {
 
     '@typescript-eslint/consistent-type-assertions': 'warn',
     '@typescript-eslint/no-unused-vars': 'off',
-
+    '@typescript-eslint/no-for-in-array': 'off',
   },
 };
