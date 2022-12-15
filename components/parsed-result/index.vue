@@ -302,3 +302,9 @@ export default {
   }
 }
 </style>
+
+<style lang="less" scoped>
+.collapse-item.selected {
+  background: #f3f3f3;
+}
+</style>

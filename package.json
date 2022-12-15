@@ -12,7 +12,9 @@
     "preview": "nuxt preview",
     "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx,.md,.json --fix --cache"
   },
-  "dependencies": {},
+  "dependencies": {
+    "vue3-selecto": "^1.6.3"
+  },
   "devDependencies": {
     "@chuhoman/eslint-config-vue": "^0.0.7",
     "@iconify-json/eva": "^1.1.3",

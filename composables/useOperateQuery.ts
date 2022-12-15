@@ -3,7 +3,7 @@ import { QUERY_STATUS, QueryStatus } from '~~/components/parsed-result/utils';
 import { ProvideQueryState } from '~~/types';
 
 export function useOperateQuery(query: Ref<Record<string, any>>, status: Ref<QueryStatus[]>) {
-  const { updateIsEditingQuery } = inject<ProvideQueryState>(QUERY_STATE_KEY)!;
+  const { updateIsEditingQuery, selectedQueryItems, clearAllSelectedQueryItems } = inject<ProvideQueryState>(QUERY_STATE_KEY)!;
   const queryState = reactive<{
         elRefs: HTMLElement[]
           }>({
@@ -38,6 +38,22 @@ export function useOperateQuery(query: Ref<Record<string, any>>, status: Ref<Que
       updateIsEditingQuery(false);
     });
   }
+
+  onMounted(() => {
+    useEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'Backspace':
+          console.log(selectedQueryItems);
+          if (selectedQueryItems.value?.length > 0) {
+            // TODO BATCH Delete
+            clearAllSelectedQueryItems();
+          }
+          break;
+        default:
+          break;
+      }
+    });
+  });
 
   return {
     isEditStatusComp,
