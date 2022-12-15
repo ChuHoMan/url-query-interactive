@@ -27,7 +27,7 @@ const { copied: queryCopied, startCopy: startCopyQuery } = useCopy<Record<string
   format: 'JSON',
 });
 
-const collapseActiveKeys = ref<number[]>([0]);
+const collapseActiveKeys = ref<number[]>([]);
 
 // TODO fake module and page
 const { fetchJSON, parsedPageQueryJSON } = useTypeToJSON();
