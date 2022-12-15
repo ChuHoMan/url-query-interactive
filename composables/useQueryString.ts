@@ -28,8 +28,11 @@ function parse(params: string, options: {
     const params: Record<string, any> = {};
 
     for (const key of props.keys()) {
-      if (key.endsWith('[]')) params[key.replace('[]', '')] = props.getAll(key);
-      else params[key] = props.get(key)!;
+      if (key.endsWith('[]')) {
+        params[key.replace('[]', '')] = props.getAll(key);
+      } else {
+        params[key] = props.get(key)!;
+      }
     }
 
     return params;
@@ -49,13 +52,12 @@ export function useQueryString(url: Ref<string>, emit: any) {
     originPath: '',
   });
   const urlRef = ref<Partial<URL>>({});
-  const { updateIsEditingQuery } = inject<ProvideQueryState>(QUERY_STATE_KEY)!;
+  const { updateIsEditingQuery, isEditingQuery } = inject<ProvideQueryState>(QUERY_STATE_KEY)!;
 
   const status = ref<QueryStatus[]>(Array.from({
     length: Object.keys(state.query).length,
   }).fill(QUERY_STATUS.PREVIEW) as QueryStatus[]);
 
-  const isEditQueryState = ref(false);
   watchEffect(() => {
     const isEditing = status.value.includes(QUERY_STATUS.EDIT);
     updateIsEditingQuery(isEditing);
@@ -69,16 +71,18 @@ export function useQueryString(url: Ref<string>, emit: any) {
   });
 
   const originPath = computed(() => {
-    if (!urlRef.value?.origin && !urlRef.value?.pathname)
+    if (!urlRef.value?.origin && !urlRef.value?.pathname) {
       return '';
+    }
 
     return `${urlRef.value!.origin}${urlRef.value!.pathname}`;
   });
 
   watch(() => state.query, (newValue, oldValue) => {
-    console.log(newValue, oldValue);
-    if (isObject(newValue) && isObject(oldValue) && Object.keys(newValue).length > 0 && Object.keys(oldValue).length > 0 && isEditQueryState.value)
+    console.log(newValue.a, oldValue.a);
+    if (isObject(newValue) && isObject(oldValue) && Object.keys(newValue).length > 0 && Object.keys(oldValue).length > 0 && isEditingQuery.value) {
       emit('query-changed', newValue, urlRef.value);
+    }
   }, {
     deep: true,
   });
@@ -87,6 +91,5 @@ export function useQueryString(url: Ref<string>, emit: any) {
     ...toRefs(state),
     originPath,
     status,
-    isEditQueryState,
   };
 }
