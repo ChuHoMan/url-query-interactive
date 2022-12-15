@@ -8,6 +8,8 @@ module.exports = {
     'no-undef': 'off',
     'no-unused-vars': 'off',
 
+    'curly': ['error', 'all'],
+
     'vue/multi-word-component-names': 'off',
     'brace-style': ['error', '1tbs', { allowSingleLine: false }],
 
