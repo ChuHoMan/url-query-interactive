@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { Ref } from 'vue';
 import { QUERY_STATUS, QueryStatus } from './utils';
 import EvaCopyOutline from '~icons/eva/copy-outline';
 import EvaCheckmarkOutline from '~icons/eva/checkmark-outline';
@@ -18,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(['query-changed']);
 
-const { originPath, query = {} as Record<string, any>, status } = useQueryString(toRef(props, 'url'), emit);
+const { originPath, query = {} as Ref<Record<string, any>>, status } = useQueryString(toRef(props, 'url'), emit);
 
 const { copied, startCopy } = useCopy<string>(originPath);
 
@@ -48,32 +49,13 @@ const previewPargeQueryBlockTags = computed(() => {
   };
 });
 
-const queryState = reactive<{
- elRefs: HTMLElement[]
-   }>({
-     elRefs: Array.from({
-       length: Object.keys(query.value).length,
-     }),
-   });
-
-const toggleStatus = (_status: QueryStatus, index: number) => {
-  status.value[index] = _status;
-  if (status.value[index] === QUERY_STATUS.EDIT) {
-    nextTick(() => {
-      queryState.elRefs[index].focus();
-    });
-  }
-};
-
-const isEditStatusComp = computed(() => {
-  return function (index: number) {
-    return status.value[index] === QUERY_STATUS.EDIT;
-  };
-});
-
-function handleEditQuery(e: Event, queryKey: string) {
-  query.value[queryKey] = (e.target as any).textContent;
-}
+const {
+  isEditStatusComp,
+  toggleStatus,
+  handleEditQuery,
+  handleDeleteQueryItem,
+  queryState,
+} = useOperateQuery(query, status);
 </script>
 
 <script lang="ts">
@@ -139,7 +121,7 @@ export default {
                         class="operation-icon"
                         @click="toggleStatus(QUERY_STATUS.EDIT, index)"
                       />
-                      <eva-trash-2-fill style="color: var(--danger-color)" class="operation-icon" />
+                      <eva-trash-2-fill style="color: var(--danger-color)" class="operation-icon" @click="handleDeleteQueryItem(queryKey)" />
                     </div>
                   </span>
                   <div class="query__value__wrapper">
