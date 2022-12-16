@@ -2,6 +2,10 @@
 
 > Use query-string to parse url query and display it on the page with Nuxt3
 
+<p align='center'>
+<a href="https://github.com/ChuHoMan/url-query-interactive/blob/main/README.zh-CN.md">English</a> | <b>简体中文</b>
+</p>
+
 ## DEMO
 ![demo](https://github.com/ChuHoMan/url-query-interactive/blob/main/examples/demo.png)
 
@@ -10,18 +14,12 @@
 - [x] support delete query params (single)
 - [x] support delete query params (multiple)
 - [x] support edit query param
+
 ## Setup
 
 Make sure to install the dependencies:
 
 ```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
 pnpm install --shamefully-hoist
 ```
 
