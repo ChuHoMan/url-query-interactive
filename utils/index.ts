@@ -3,3 +3,4 @@ export * from './vue';
 export * from './array';
 export * from './url';
 export * from './constants';
+export * from './dom';

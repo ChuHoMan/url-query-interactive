@@ -1,13 +1,18 @@
-import type { Ref } from 'vue';
+import type { ComponentPublicInstance, Ref } from 'vue';
+import { QueryStringState } from './useQueryString';
 import { QUERY_STATUS, QueryStatus } from '~~/components/parsed-result/utils';
 import { ProvideQueryState } from '~~/types';
 
-export function useOperateQuery(query: Ref<Record<string, any>>, status: Ref<QueryStatus[]>) {
-  const { updateIsEditingQuery, selectedQueryItems, clearAllSelectedQueryItems } = inject<ProvideQueryState>(QUERY_STATE_KEY)!;
+export function useOperateQuery(query: Ref<Record<string, any>>, status: Ref<QueryStatus[]>, indexToQueryKeyMap: Ref<QueryStringState['indexToQueryKeyMap']>) {
+  const { updateIsEditingQuery, selectedQueryIndexes, clearAllSelectedQueryIndexes } = inject<ProvideQueryState>(QUERY_STATE_KEY)!;
   const queryState = reactive<{
         elRefs: HTMLElement[]
+        collapseItemRefs: ComponentPublicInstance[]
           }>({
             elRefs: Array.from({
+              length: Object.keys(query.value).length,
+            }),
+            collapseItemRefs: Array.from({
               length: Object.keys(query.value).length,
             }),
           });
@@ -43,11 +48,11 @@ export function useOperateQuery(query: Ref<Record<string, any>>, status: Ref<Que
     useEventListener('keydown', (e) => {
       switch (e.key) {
         case 'Backspace':
-          console.log(selectedQueryItems);
-          if (selectedQueryItems.value?.length > 0) {
-            // TODO BATCH Delete
-            clearAllSelectedQueryItems();
-          }
+          selectedQueryIndexes.value.forEach((index) => {
+            const queryKey = indexToQueryKeyMap.value.get(index);
+            queryKey && handleDeleteQueryItem(queryKey);
+          });
+          clearAllSelectedQueryIndexes();
           break;
         default:
           break;

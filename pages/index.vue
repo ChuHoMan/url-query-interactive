@@ -3,47 +3,44 @@ import { VueSelecto } from 'vue3-selecto';
 import { computedInputModel } from '../composables/state';
 import { ProvideQueryState } from '@/types/index';
 import { QUERY_STATE_KEY } from '@/utils';
+import ParsedResult from '@/components/parsed-result/index.vue';
 
 function handleQueryChanged(query: Record<string, any>, urlRef: any) {
   computedInputModel.value = buildURL(urlRef.origin + urlRef.pathname, query);
 }
 
 const isEditingQuery = ref(false);
-const selectedQueryItems: ProvideQueryState['selectedQueryItems'] = ref([]);
-function clearAllSelectedQueryItems() {
-  selectedQueryItems.value.length = 0;
+const selectedQueryIndexes: ProvideQueryState['selectedQueryIndexes'] = ref([]);
+function clearAllSelectedQueryIndexes() {
+  selectedQueryIndexes.value.length = 0;
 }
 provide<ProvideQueryState>(QUERY_STATE_KEY, {
   isEditingQuery,
   updateIsEditingQuery(val: boolean) {
     isEditingQuery.value = !!val;
   },
-  selectedQueryItems,
-  clearAllSelectedQueryItems,
+  selectedQueryIndexes,
+  clearAllSelectedQueryIndexes,
 });
 
-const selectableTargets = ref([]);
-const container = ref();
+const parsedResultRef = ref<ComponentRef<typeof ParsedResult>>();
+const selectableTargets = computed(() => {
+  const resultRef = parsedResultRef.value!;
+  return resultRef?.queryState.collapseItemRefs.map(ref => ref?.$el);
+});
 function onSelect(e: any) {
   e.added.forEach((el: HTMLElement) => {
     el.classList.add('selected');
-    selectedQueryItems.value.push(el);
+    selectedQueryIndexes.value.push(getElementIndexFromParent(el));
   });
   e.removed.forEach((el: HTMLElement) => {
     el.classList.remove('selected');
-    const index = selectedQueryItems.value.findIndex((item) => {
-      return item === el;
+    const index = selectedQueryIndexes.value.findIndex((idx) => {
+      return idx === getElementIndexFromParent(el);
     });
-    selectedQueryItems.value.splice(index, 1);
+    selectedQueryIndexes.value.splice(index, 1);
   });
 }
-
-onMounted(() => {
-  nextTick(() => {
-    selectableTargets.value = Array.from(document.querySelectorAll('.collapse-item'));
-    container.value = document.querySelector('.app__right');
-  });
-});
 </script>
 
 <script lang="ts">
@@ -59,13 +56,16 @@ export default {
       <Search />
     </div>
     <div class="app__right">
-      <ParsedResult :url="computedInputModel" @query-changed="handleQueryChanged" />
+      <parsed-result
+        ref="parsedResultRef"
+        :url="computedInputModel"
+        @query-changed="handleQueryChanged"
+      />
     </div>
 
     <vue-selecto
-      :container="container"
-      :drag-container="container"
       :selectable-targets="selectableTargets"
+      :select-by-click="false"
       :select-from-inside="true"
       :continue-select="false"
       :hit-rate="5"

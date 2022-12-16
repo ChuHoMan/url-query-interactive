@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(['query-changed']);
 
-const { originPath, query = {} as Ref<Record<string, any>>, status } = useQueryString(toRef(props, 'url'), emit);
+const { originPath, query = {} as Ref<Record<string, any>>, status, indexToQueryKeyMap } = useQueryString(toRef(props, 'url'), emit);
 
 const { copied, startCopy } = useCopy<string>(originPath);
 
@@ -31,11 +31,6 @@ const collapseActiveKeys = ref<number[]>([]);
 
 // TODO fake module and page
 const { fetchJSON, parsedPageQueryJSON } = useTypeToJSON();
-
-await fetchJSON({
-  module: '',
-  page: '',
-});
 
 const previewPageQueryJSON = computed(() => {
   return parsedPageQueryJSON.value?.children.filter((child) => {
@@ -55,7 +50,16 @@ const {
   handleEditQuery,
   handleDeleteQueryItem,
   queryState,
-} = useOperateQuery(query, status);
+} = useOperateQuery(query, status, indexToQueryKeyMap);
+
+defineExpose({
+  queryState,
+});
+
+await fetchJSON({
+  module: '',
+  page: '',
+});
 </script>
 
 <script lang="ts">
@@ -100,7 +104,12 @@ export default {
           </span>
         </div>
         <collapse v-model="collapseActiveKeys">
-          <collapse-item v-for="(queryKey, index) of Object.keys(query)" :key="queryKey" :name="index">
+          <collapse-item
+            v-for="(queryKey, index) of Object.keys(query)"
+            :key="queryKey"
+            :ref="(el) => queryState.collapseItemRefs[index] = el as any"
+            :name="index"
+          >
             <template #header="{ isActive, handleClickItem }">
               <ul class="query__list">
                 <li

@@ -8,7 +8,7 @@
 ## Feature TODO list
 - [x] display type comment
 - [x] support delete query params (single)
-- [] support delete query params (multiple)
+- [x] support delete query params (multiple)
 - [x] support edit query param
 ## Setup
 

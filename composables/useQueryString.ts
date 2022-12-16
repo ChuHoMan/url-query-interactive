@@ -2,10 +2,12 @@ import { Ref, reactive, toRefs, watch } from 'vue';
 import { QUERY_STATUS, QueryStatus } from '~~/components/parsed-result/utils';
 import { ProvideQueryState } from '@/types/index';
 
-interface QueryStringState {
+export interface QueryStringState {
     query: Record<string, string>
     rawUrl: string
     originPath: string
+    /** key 与 index 索引关系 */
+    indexToQueryKeyMap: Map<number, string>
 }
 
 function createUrl(url: string): Partial<URL> {
@@ -50,6 +52,7 @@ export function useQueryString(url: Ref<string>, emit: any) {
     query: {},
     rawUrl: url.value,
     originPath: '',
+    indexToQueryKeyMap: new Map<number, string>(),
   });
   const urlRef = ref<Partial<URL>>({});
   const { updateIsEditingQuery, isEditingQuery } = inject<ProvideQueryState>(QUERY_STATE_KEY)!;
@@ -79,12 +82,18 @@ export function useQueryString(url: Ref<string>, emit: any) {
   });
 
   watch(() => state.query, (newValue, oldValue) => {
-    console.log(newValue.a, oldValue.a);
-    if (isObject(newValue) && isObject(oldValue) && Object.keys(newValue).length > 0 && Object.keys(oldValue).length > 0 && isEditingQuery.value) {
+    if (isObject(newValue) && isObject(oldValue) && Object.keys(newValue).length > 0 && Object.keys(oldValue!).length > 0 && isEditingQuery.value) {
       emit('query-changed', newValue, urlRef.value);
+    }
+
+    if (isObject(newValue)) {
+      Object.keys(newValue).forEach((key, idx) => {
+        state.indexToQueryKeyMap.set(idx, key);
+      });
     }
   }, {
     deep: true,
+    immediate: true,
   });
 
   return {
