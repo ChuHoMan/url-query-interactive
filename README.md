@@ -3,7 +3,7 @@
 > Use query-string to parse url query and display it on the page with Nuxt3
 
 <p align='center'>
-<a href="https://github.com/ChuHoMan/url-query-interactive/blob/main/README.zh-CN.md">English</a> | <b>简体中文</b>
+<b>English</b> | <a href="https://github.com/ChuHoMan/url-query-interactive/blob/main/README.zh-CN.md">简体中文</a>
 </p>
 
 ## DEMO
