@@ -3,4 +3,11 @@
     --bg-color: #ffffff;
     --border-color: #cccccc;
     --danger-color: #FF605A;
+    --bg-color-1: #f3f3f3;
+    --bg-selection: rgba(46, 50, 56, 0.3);
+    --border-selection: #C6CACD;
+}
+
+.dark {
+    --bg-color-1: #41464C;
 }

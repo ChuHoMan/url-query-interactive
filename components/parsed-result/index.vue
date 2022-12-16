@@ -314,6 +314,6 @@ export default {
 
 <style lang="less" scoped>
 .collapse-item.selected {
-  background: #f3f3f3;
+  background: var(--bg-color-1);
 }
 </style>
